@@ -15,6 +15,7 @@ export const mainTheme = {
     header: "#2d98da",
     input: "#dcdcdc",
     border: "#dcdcdc",
+    fade: "rgb(0 0 0 / 50%)",
     transparent: "transparent",
 
     // Text

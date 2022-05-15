@@ -8,8 +8,8 @@ import * as S from "./Modal.styles";
 const Modal = ({ isShowing, hide, children, title }: ModalPropsType) =>
   isShowing
     ? ReactDOM.createPortal(
-        <>
-          <S.ModalOverlay pageOffset={window.scrollY}>
+        <S.ModalOverlay>
+          <S.ModalContainer pageOffset={window.scrollY}>
             <S.ModalTitleContainer>
               <S.ModalTitle>{title}</S.ModalTitle>
               <Button variation="light" onClick={hide}>
@@ -17,8 +17,8 @@ const Modal = ({ isShowing, hide, children, title }: ModalPropsType) =>
               </Button>
             </S.ModalTitleContainer>
             <S.ModalContent>{children}</S.ModalContent>
-          </S.ModalOverlay>
-        </>,
+          </S.ModalContainer>
+        </S.ModalOverlay>,
         document.body
       )
     : null;

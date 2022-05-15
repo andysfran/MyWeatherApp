@@ -1,18 +1,36 @@
 import styled from "styled-components";
 
-export const ModalOverlay = styled.div<{ pageOffset?: number }>`
+export const ModalOverlay = styled.div`
+  width: 100%;
+  height: 100%;
+  background-color: ${({ theme }) => theme.colors.fade};
+  position: absolute;
+  top: 0;
+`;
+
+export const ModalContainer = styled.div<{ pageOffset?: number }>`
   width: 100%;
   height: 100vh;
   background-color: ${({ theme }) => theme.colors.white};
   position: absolute;
   top: ${({ pageOffset }) => (pageOffset ? `${pageOffset}px` : 0)};
 
-  @media only screen and (min-width: 768px) {
-    width: 600px;
+  @media only screen and (min-width: 768px) and (max-width: 1440px) {
+    width: 70%;
+    height: 500px;
+    box-shadow: 1px 0 8px ${({ theme }) => theme.colors.black};
+    top: 10%;
+    left: 15%;
+    right: 15%;
+  }
+
+  @media only screen and (min-width: 1440px) {
+    width: 50%;
     height: 500px;
     box-shadow: 1px 0 8px ${({ theme }) => theme.colors.black};
     top: 10%;
     left: 25%;
+    right: 25%;
   }
 }
 `;
@@ -30,12 +48,6 @@ export const ModalTitle = styled.span`
   width: 100%;
   font-size: ${({ theme }) => theme.fontSize.l};
   color: ${({ theme }) => theme.colors.textPrimary};
-`;
-
-export const TitleButton = styled.button`
-  width: 48px;
-  height: 44px;
-  padding: ${({ theme }) => theme.spacing.s};
 `;
 
 export const ModalContent = styled.section`
