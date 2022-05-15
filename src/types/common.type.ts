@@ -15,3 +15,12 @@ export type LocationDataStateType = {
   lon: string;
   name: string;
 };
+
+export type GeolocationType = {
+  name: string;
+  local_names: Record<string, string>;
+  lat: number;
+  lon: number;
+  state?: string;
+  country: string;
+};

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useLocalCities } from "../../hooks";
 import { fetchLocation } from "../../api";
 import { LocationDataStateType } from "../../types";
+import { getFormattedCity } from "../../utils/dataFormat";
 
 import Input from "../Input/Input";
 import Button from "../Button/Button";
@@ -30,13 +31,10 @@ const LocationBookmarks = ({
       const { status, data } = await fetchLocation(searchQuery);
       if (status === 200) {
         const resMapped = data.map((place) => {
-          let name = place.name;
-          if (place.state) name += `, ${place.state}`;
-          name += `, ${place.country}`;
           return {
             lat: `${place.lat}`,
             lon: `${place.lon}`,
-            name,
+            name: getFormattedCity(place),
           };
         });
         setPlaces(resMapped);

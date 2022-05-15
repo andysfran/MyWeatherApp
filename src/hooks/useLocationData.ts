@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
+
 import { LocationDataStateType } from "../types";
+import { fetchLocationReverse } from "../api";
+import { getFormattedCity } from "../utils/dataFormat";
 
 const useLocationData = () => {
   const [locationData, setLocationData] = useState<LocationDataStateType>({
@@ -14,11 +17,15 @@ const useLocationData = () => {
 
   const getUserLocation = () => {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(({ coords }) => {
+      navigator.geolocation.getCurrentPosition(async ({ coords }) => {
+        const { data } = await fetchLocationReverse(
+          coords.latitude,
+          coords.longitude
+        );
         setLocationData({
           lat: `${coords.latitude}`,
           lon: `${coords.longitude}`,
-          name: "Current location",
+          name: getFormattedCity(data[0]),
         });
       });
     } else {

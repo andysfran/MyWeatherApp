@@ -1,3 +1,2 @@
-
-export { fetchLocation } from './geolocation';
-export { fetchForecast } from './forecast';
+export { fetchLocation, fetchLocationReverse } from "./geolocation";
+export { fetchForecast } from "./forecast";
