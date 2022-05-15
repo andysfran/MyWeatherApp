@@ -47,8 +47,9 @@ const LocationBookmarks = ({
   };
 
   const onAddCity = (city: LocationDataStateType) => {
-    addCity(city);
-    toggleIsSearching();
+    if (addCity(city)) {
+      toggleIsSearching();
+    }
   };
 
   const renderSearchForm = () => {
