@@ -1,17 +1,10 @@
 import React, { KeyboardEvent } from "react";
 
+import { InputPropsType } from "../../types";
 import * as S from "./Input.styles";
 import debounce from "../../utils/debounce";
 
-const Input = ({
-  onValue,
-  label,
-  placeholder,
-}: {
-  onValue: (value: string) => void;
-  label: string;
-  placeholder?: string;
-}) => {
+const Input = ({ onValue, label, placeholder }: InputPropsType) => {
   const changeValue = debounce((e: KeyboardEvent<HTMLInputElement>) => {
     onValue((e.target as HTMLInputElement).value);
   });

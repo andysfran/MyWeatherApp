@@ -6,3 +6,4 @@ export type {
 } from "./common.type";
 export type { ModalPropsType } from "./modal.type";
 export type { WeatherCardPropsType } from "./weather-card.type";
+export type { InputPropsType } from "./input.type";
