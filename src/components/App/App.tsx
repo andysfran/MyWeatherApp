@@ -1,4 +1,4 @@
-import React, { ReactElement, useEffect, useState } from "react";
+import React, { ReactElement, useCallback, useEffect, useState } from "react";
 
 import {
   DefaultProps,
@@ -19,13 +19,7 @@ const App: DefaultProps = (): ReactElement => {
   const { locationData, setLocationData } = useLocationData();
   const [forecastData, setForecastData] = useState<ForecastDataStateType>({});
 
-  useEffect(() => {
-    if (locationData.lat && locationData.lon) {
-      getForecastData();
-    }
-  }, [locationData]);
-
-  const getForecastData = async () => {
+  const getForecastData = useCallback(async () => {
     const { status, data } = await fetchForecast(
       locationData.lat,
       locationData.lon
@@ -37,7 +31,13 @@ const App: DefaultProps = (): ReactElement => {
         daily: data?.daily,
       });
     }
-  };
+  }, [locationData.lat, locationData.lon]);
+
+  useEffect(() => {
+    if (locationData.lat && locationData.lon) {
+      getForecastData().then();
+    }
+  }, [locationData, getForecastData]);
 
   const renderForecastData = () => {
     if (Object.keys(forecastData).length > 0) {
