@@ -1,40 +1,29 @@
 import React, { ReactElement, useEffect, useState } from "react";
 
-import { DefaultProps } from "../../types";
-import Header from "../Header/Header";
-import * as S from "./App.styles";
-import WeatherCard from "../WeatherCard/WeatherCard";
+import {
+  DefaultProps,
+  ForecastDataStateType,
+  LocationDataStateType,
+} from "../../types";
 import { fetchForecast } from "../../api";
+import { useModal, useLocationData } from "../../hooks";
 
-const App: DefaultProps = ({ children }): ReactElement => {
-  const [readyToFetch, setReadyToFetch] = useState<boolean>(false);
-  const [locationData, setLocationData] = useState({
-    lat: "38.7259284",
-    lon: "-9.137382",
-    name: "Lisbon, Portugal",
-  });
-  const [forecastData, setForecastData] = useState<{
-    temperature?: number;
-    daily?: Record<string, any>[];
-  }>({});
+import * as S from "./App.styles";
+import Header from "../Header/Header";
+import WeatherCard from "../WeatherCard/WeatherCard";
+import Modal from "../Modal/Modal";
+import LocationBookmarks from "../LocationBookmarks/LocationBookmarks";
+
+const App: DefaultProps = (): ReactElement => {
+  const { toggle, isShowing } = useModal();
+  const { locationData, setLocationData } = useLocationData();
+  const [forecastData, setForecastData] = useState<ForecastDataStateType>({});
 
   useEffect(() => {
-    if (!readyToFetch) getUserLocation();
-  });
-
-  const getUserLocation = () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(({ coords }) => {
-        setLocationData({
-          lat: `${coords.latitude}`,
-          lon: `${coords.longitude}`,
-          name: "Current location",
-        });
-      });
+    if (locationData.lat && locationData.lon) {
+      getForecastData();
     }
-    setReadyToFetch(true);
-    getForecastData().then();
-  };
+  }, [locationData]);
 
   const getForecastData = async () => {
     const { status, data } = await fetchForecast(
@@ -44,6 +33,7 @@ const App: DefaultProps = ({ children }): ReactElement => {
     if (status === 200) {
       setForecastData({
         temperature: parseInt(data?.current.temp),
+        icon: data?.current.weather[0].icon,
         daily: data?.daily,
       });
     }
@@ -56,17 +46,21 @@ const App: DefaultProps = ({ children }): ReactElement => {
           <WeatherCard
             locationName={locationData.name}
             temperature={forecastData.temperature || ""}
+            icon={forecastData.icon}
           />
           <S.NextForecastText>7 day weather forecast:</S.NextForecastText>
           <S.NextForecastContainer>
             {forecastData.daily?.map(
               (day, index) =>
-                index > 0 && (
+                index >= 1 && (
                   <WeatherCard
                     key={day.dt}
                     locationName={locationData.name}
                     date={day.dt}
+                    icon={day.weather[0].icon}
                     temperature={parseInt(day.temp.day)}
+                    minTemperature={parseInt(day.temp.min)}
+                    maxTemperature={parseInt(day.temp.max)}
                   />
                 )
             )}
@@ -77,10 +71,18 @@ const App: DefaultProps = ({ children }): ReactElement => {
     return null;
   };
 
+  const onSelectCity = (city: LocationDataStateType) => {
+    setLocationData(city);
+    toggle();
+  };
+
   return (
     <S.AppContainer>
-      <Header />
+      <Header onOpenBookmarks={toggle} />
       <S.ContentContainer>{renderForecastData()}</S.ContentContainer>
+      <Modal title="Bookmarks" isShowing={isShowing} hide={toggle}>
+        <LocationBookmarks onSelectCity={onSelectCity} />
+      </Modal>
     </S.AppContainer>
   );
 };
