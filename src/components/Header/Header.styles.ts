@@ -22,4 +22,5 @@ export const HeaderTitle = styled.span`
   color: ${({ theme }) => theme.colors.white};
   font-weight: bold;
   font-size: ${({ theme }) => theme.fontSize.l};
+  text-shadow: 3px 3px 3px ${({ theme }) => theme.colors.black};
 `;

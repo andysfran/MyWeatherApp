@@ -2,6 +2,7 @@ import styled from "styled-components";
 
 export const LocationText = styled.h3`
   margin-top: 0;
+  margin-bottom: 0;
   color: ${({ theme }) => theme.colors.textSecondary};
   font-size: ${({ theme }) => theme.fontSize.m};
 `;
@@ -11,6 +12,7 @@ export const LocationIcon = styled.img`
 `;
 
 export const DateText = styled.p`
+  margin-top: 0;
   color: ${({ theme }) => theme.colors.textPrimary};
   font-size: ${({ theme }) => theme.fontSize.m};
 `;
