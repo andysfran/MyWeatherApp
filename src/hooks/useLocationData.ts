@@ -16,8 +16,8 @@ const useLocationData = () => {
   }, []);
 
   const getUserLocation = () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(async ({ coords }) => {
+    navigator.geolocation.getCurrentPosition(
+      async ({ coords }) => {
         const { data } = await fetchLocationReverse(
           coords.latitude,
           coords.longitude
@@ -27,14 +27,16 @@ const useLocationData = () => {
           lon: `${coords.longitude}`,
           name: getFormattedCity(data[0]),
         });
-      });
-    } else {
-      setLocationData({
-        lat: "38.7259284",
-        lon: "-9.137382",
-        name: "Lisbon, Portugal",
-      });
-    }
+      },
+      (err) => {
+        setLocationData({
+          lat: "38.7259284",
+          lon: "-9.137382",
+          name: "Lisbon, Portugal",
+        });
+      },
+      { maximumAge: 60000, timeout: 5000, enableHighAccuracy: true }
+    );
   };
 
   return { locationData, setLocationData };
